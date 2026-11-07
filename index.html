@@ -259,44 +259,58 @@
     </div>
   </section>
 
-  <!-- ============ CLUB RECORDS (team suggestion · data from Strava, Nov 2026) ============
-       Each record card: rec__face = photo (initials show until it loads) · rec__time · rec__meta = event · date (add the finishing position when you have it)
-       Times are each runner's fastest Strava "best effort" at that distance. Swap in official chip times when you have them. -->
+  <!-- ============ CLUB RECORDS (team rule: official race results of the current year only — marathons and timed runs) ============
+       Card types:
+         • MyRaceIndia results load LIVE: put data-myrace="Event Name|Bib" on the card (time and rank are fetched; the values
+           written in the card are the fallback if the API is down).
+         • Other timing companies (Sports Timing Solutions etc.): type the time / rank by hand.
+         • "Record open": no official time yet this year. -->
   <section id="records" data-lane="m" data-lane-mobile="r" data-km="33">
     <div class="wrap">
-      <div class="head"><div><span class="kicker">Club records</span><h2>Our fastest, so far.</h2></div><p class="muted">The best time by a Punjai Capitals runner at each distance. Beat one and your photo goes up here.</p></div>
+      <div class="head"><div><span class="kicker">Club records · 2026</span><h2>Our fastest, so far.</h2></div><p class="muted">The best official race time by a Punjai Capitals runner at each distance this year. Beat one at a timed race and your photo goes up here.</p></div>
       <div class="records__grid lane-grid">
-        <div class="records" aria-label="Best club times by distance">
-          <article class="rec">
+        <div class="records" aria-label="Best official club times by distance, 2026">
+          <article class="rec" data-myrace="Gobi Marathon 2026|5039">
             <span class="rec__dist">5K</span>
             <span class="rec__face" data-i="KS"><img src="assets/people/kalaiselvan.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span>
             <h3 class="rec__name">Kalaiselvan S</h3>
-            <p class="rec__time">18:50</p>
-            <p class="rec__meta">5K event, Sathyamangalam · 26 Jul 2026</p>
-            <a class="rec__src" href="https://www.strava.com/activities/19466281826" target="_blank" rel="noopener">On Strava<span class="sr"> · 5K record</span></a>
+            <p class="rec__time" data-f="time">21:38</p>
+            <p class="rec__rank" data-f="rank">13th of 429</p>
+            <p class="rec__meta">Gobi Marathon · 5K timed run · Nov 2026</p>
+            <a class="rec__src" href="https://myraceindia.com/individuals/Gobi%20Marathon%202026/2026/Kalaiselvan%20S%20-%205039" target="_blank" rel="noopener">Official result<span class="sr"> · 5K</span></a>
           </article>
-          <article class="rec">
-            <span class="rec__dist">10K</span>
+          <article class="rec" data-myrace="Tirupur Runners Marathon 2026|52049">
+            <span class="rec__dist">6K</span>
             <span class="rec__face" data-i="KS"><img src="assets/people/kalaiselvan.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span>
             <h3 class="rec__name">Kalaiselvan S</h3>
-            <p class="rec__time">43:54</p>
-            <p class="rec__meta">Bluemount Marathon · 20 Sep 2026</p>
-            <a class="rec__src" href="https://www.strava.com/activities/20248253192" target="_blank" rel="noopener">On Strava<span class="sr"> · 10K record</span></a>
+            <p class="rec__time" data-f="time">23:49</p>
+            <p class="rec__rank" data-f="rank">9th of 1,290</p>
+            <p class="rec__meta">Tirupur Runners Marathon · 2 Aug 2026</p>
+            <a class="rec__src" href="https://myraceindia.com/individuals/Tirupur%20Runners%20Marathon%202026/2026/52049" target="_blank" rel="noopener">Official result<span class="sr"> · 6K</span></a>
+          </article>
+          <article class="rec" data-myrace="Gobi Marathon 2026|10045">
+            <span class="rec__dist">10K</span>
+            <span class="rec__face" data-i="SL"></span>
+            <h3 class="rec__name">Subabalagan L</h3>
+            <p class="rec__time" data-f="time">45:37</p>
+            <p class="rec__rank" data-f="rank">10th of 456</p>
+            <p class="rec__meta">Gobi Marathon · 10K timed run · Nov 2026</p>
+            <a class="rec__src" href="https://myraceindia.com/individuals/Gobi%20Marathon%202026/2026/10045" target="_blank" rel="noopener">Official result<span class="sr"> · 10K</span></a>
           </article>
           <article class="rec">
             <span class="rec__dist">21.1K</span>
-            <span class="rec__face" data-i="KS"><img src="assets/people/kalaiselvan.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span>
-            <h3 class="rec__name">Kalaiselvan S</h3>
-            <p class="rec__time">1:42:42</p>
-            <p class="rec__meta">Independence Day run · 15 Aug 2025</p>
-            <a class="rec__src" href="https://www.strava.com/activities/15462560944" target="_blank" rel="noopener">On Strava<span class="sr"> · 21.1K record</span></a>
+            <span class="rec__face" data-i="RJ"><img src="assets/people/raguraam.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span>
+            <h3 class="rec__name">Raguraam Jaganathan</h3>
+            <p class="rec__time" data-f="time">2:18:01</p>
+            <p class="rec__rank" data-f="rank">5,949th of 11,076</p>
+            <p class="rec__meta">Vedanta Delhi Half Marathon · 18 Oct 2026</p>
+            <a class="rec__src" href="https://sportstimingsolutions.in/results?q=eyJlX25hbWUiOiJWZWRhbnRhIERlbGhpIEhhbGYgTWFyYXRob24gMjAyNiIsImVfaWQiOjk1MDc1LCJiaWJObyI6IjUyNTUifQ%3D%3D" target="_blank" rel="noopener">Official result<span class="sr"> · 21.1K</span></a>
           </article>
-          <!-- No club marathon time yet: replace this card with a normal .rec card like the ones above -->
-          <article class="rec rec--open">
+          <article class="rec rec--open rec--wide">
             <span class="rec__dist">42.2K</span>
             <span class="rec__face" data-i="?"></span>
             <h3 class="rec__name">Record open</h3>
-            <p class="rec__time">--:--:--</p>
+            <p class="rec__time">--:--</p>
             <p class="rec__meta">Finish a full marathon in club colours and this spot is yours.</p>
           </article>
         </div>
@@ -437,7 +451,7 @@
         <article class="support__box">
           <h2>Support us to make an impact</h2>
           <p>Sponsor a race entry, volunteer at a water station or simply share our story. Every bit of help gets one more person from our town to the start line.</p>
-          <a class="slant" href="https://ig.me/m/punjaicapitals" target="_blank" rel="noopener">Contact us</a>
+          <a class="slant" href="mailto:punjaicapitalsclub@gmail.com?subject=Supporting%20Punjai%20Capitals">Contact us</a>
         </article>
       </div>
     </div>
@@ -453,7 +467,7 @@
         <details><summary>What should I bring?<i aria-hidden="true">+</i></summary><p>Comfortable shoes, a water bottle and light clothes. A cap helps once the sun is up.</p></details>
         <details><summary>Is it free?<i aria-hidden="true">+</i></summary><p>Yes. Membership is completely free. No fees, no catch.</p></details>
         <details><summary>Who leads the sessions?<i aria-hidden="true">+</i></summary><p>Our coaches and captains plan each session and stay with the group. You'll meet them at your first run.</p></details>
-        <details><summary>How do I join?<i aria-hidden="true">+</i></summary><p>Fill in the short form below. It takes about three minutes.</p></details>
+        <details><summary>How do I join?<i aria-hidden="true">+</i></summary><p>Fill in the short form below. Two quick steps, about a minute.</p></details>
       </div>
     </div>
   </section>
@@ -478,7 +492,7 @@
     </div>
     <div class="wrap finish__copy">
       <h2 id="finishTitle"><span>You just ran 42.2K.</span><span>Now come run the real one.</span></h2>
-      <p class="lead">Membership is free. The form takes about three minutes.</p>
+      <p class="lead">Membership is free. The form takes about a minute.</p>
     </div>
 
     <!-- Strava-style summary of the visitor's scroll run + finisher certificate -->
@@ -520,58 +534,42 @@
       <div>
         <span class="kicker">Join the club</span>
         <h2>Come run with us.</h2>
-        <p class="lead">Membership is free. The form takes about three minutes, and a captain will contact you before your first session.</p>
+        <p class="lead">Membership is free. The form has two short steps (about a minute), and a captain will contact you before your first session.</p>
         <ul class="join__list">
           <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5L8 14.5L16 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>No fees, no experience needed</li>
           <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5L8 14.5L16 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Your details stay with the club</li>
           <li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5L8 14.5L16 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Health details are only used for your safety</li>
         </ul>
+        <p class="join__contact">Questions? Email <a class="link" href="mailto:punjaicapitalsclub@gmail.com">punjaicapitalsclub@gmail.com</a> or message us on <a class="link" href="https://www.instagram.com/punjaicapitals" target="_blank" rel="noopener">Instagram</a>.</p>
       </div>
 
       <form class="form" id="joinForm" novalidate aria-labelledby="stepTitle">
-        <div class="track" aria-hidden="true"><span class="on">1 · You</span><span>2 · Contact</span><span>3 · Health</span><span>4 · Final</span></div>
-        <div class="step__head"><h3 id="stepTitle">About you</h3><span id="stepCount">STEP 1 OF 4 · * REQUIRED</span></div>
+        <div class="track" aria-hidden="true"><span class="on">1 · About you</span><span>2 · Safety &amp; kit</span></div>
+        <div class="step__head"><h3 id="stepTitle">About you</h3><span id="stepCount">STEP 1 OF 2 · * REQUIRED</span></div>
         <fieldset class="step on" data-step="1"><legend class="sr">About you</legend>
           <div class="grid2">
-            <div class="field"><label for="name">Full name *</label><input id="name" maxlength="100" autocomplete="name" placeholder="Your full name"></div>
+            <div class="field full"><label for="name">Full name *</label><input id="name" maxlength="100" autocomplete="name" placeholder="Your full name"></div>
             <div class="field"><label for="phone">Mobile number *</label><input id="phone" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="10-digit mobile number"></div>
             <div class="field"><label for="dob">Date of birth *</label><input id="dob" type="date"></div>
             <div class="field"><label for="gender">Gender *</label><select id="gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other / prefer not to say</option></select></div>
-            <div class="field"><label for="email">Email (optional)</label><input id="email" type="email" maxlength="100" autocomplete="email" placeholder="you@example.com"></div>
-            <div class="field"><label for="area">Area / village *</label><input id="area" maxlength="150" placeholder="Where do you live?"></div>
-            <div class="field"><label for="occupation">Occupation *</label><select id="occupation"><option value="">Select</option><option>Student</option><option>Job</option><option>Business</option><option>Other</option></select></div>
-            <div class="field"><label for="level">Running / cycling experience *</label><select id="level"><option value="">Select</option><option>Beginner</option><option>Intermediate</option><option>Experienced</option></select></div>
-            <div class="field full"><label for="strava">Strava / fitness app ID (optional)</label><input id="strava" maxlength="100" placeholder="Strava profile name or link"></div>
+            <div class="field"><label for="level">Experience *</label><select id="level"><option value="">Select</option><option>Beginner</option><option>Intermediate</option><option>Experienced</option></select></div>
+            <div class="field full"><label for="area">Area / village *</label><input id="area" maxlength="150" placeholder="Where do you live?"></div>
           </div>
         </fieldset>
-        <fieldset class="step" data-step="2"><legend class="sr">Emergency contact</legend>
+        <fieldset class="step" data-step="2"><legend class="sr">Safety and kit</legend>
           <div class="grid2">
-            <div class="field"><label for="ecName">Contact name *</label><input id="ecName" maxlength="100" placeholder="Name"></div>
-            <div class="field"><label for="ecRel">Relationship *</label><select id="ecRel"><option value="">Select</option><option>Father</option><option>Mother</option><option>Spouse</option><option>Brother</option><option>Sister</option><option>Friend</option><option>Other</option></select></div>
-            <div class="field full"><label for="ecPhone">Contact mobile number *</label><input id="ecPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number"></div>
+            <div class="field"><label for="ecName">Emergency contact name *</label><input id="ecName" maxlength="100" placeholder="Name"></div>
+            <div class="field"><label for="ecPhone">Emergency contact mobile *</label><input id="ecPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number"></div>
+            <div class="field"><label for="blood">Blood group *</label><select id="blood"><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option><option>Don't know</option></select></div>
+            <div class="field"><label for="kit">Jersey size *</label><select id="kit"><option value="">Select</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option></select></div>
+            <div class="field full"><label for="health">Health conditions or injuries (optional)</label><input id="health" maxlength="300" placeholder="Asthma, BP, sugar, injury, allergy… or leave empty"></div>
           </div>
-        </fieldset>
-        <fieldset class="step" data-step="3"><legend class="sr">Health and kit</legend>
-          <div class="grid2">
-            <div class="field"><label for="blood">Blood group *</label><select id="blood"><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
-            <div class="field"><label for="jersey">Jersey / T-shirt size *</label><select id="jersey"><option value="">Select</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option></select></div>
-            <div class="field"><label for="health">Health conditions, injuries or allergies</label><select id="health"><option>None</option><option>Yes, I will mention below</option></select></div>
-            <div class="field"><label for="healthDetails">Details (optional)</label><input id="healthDetails" maxlength="300" placeholder="Asthma, heart problem, BP, sugar, injury, allergy"></div>
-            <p class="hint full">Health details are optional and used only for your safety during activities.</p>
-          </div>
-        </fieldset>
-        <fieldset class="step" data-step="4"><legend class="sr">One last thing</legend>
-          <div class="grid2">
-            <div class="field full"><label for="heard">How did you hear about us? *</label><select id="heard"><option value="">Select</option><option>Instagram</option><option>Friend</option><option>Banner / poster</option><option>Other</option></select></div>
-            <div class="field full"><label for="message">Why would you like to join? (optional)</label><textarea id="message" maxlength="500" placeholder="Tell us a little about yourself"></textarea></div>
-          </div>
-          <label class="consent" for="fit"><input id="fit" type="checkbox"><span>I declare that I am physically fit to take part in running and cycling activities.</span></label>
-          <label class="consent" for="consent"><input id="consent" type="checkbox"><span>I agree to share my details with Punjai Capitals Sports Club for membership registration.</span></label>
+          <label class="consent" for="consent"><input id="consent" type="checkbox"><span>I'm fit to take part in club runs and rides, and I agree to share these details with Punjai Capitals Sports Club.</span></label>
         </fieldset>
         <p id="result" role="status" aria-live="polite"></p>
         <div class="form__foot">
           <p class="fine">Your details are shared only with Punjai Capitals Sports Club.</p>
-          <div class="form__btns"><button class="btn btn--line" type="button" id="backBtn" disabled>Back</button><button class="btn" type="button" id="nextBtn">Next: emergency contact</button></div>
+          <div class="form__btns"><button class="btn btn--line" type="button" id="backBtn" disabled>Back</button><button class="btn" type="button" id="nextBtn">Next: safety &amp; kit</button></div>
         </div>
         <div class="done" id="doneCard" tabindex="-1">
           <span class="kicker">Registration received</span>
@@ -595,8 +593,8 @@
     <div class="wrap">
       <div class="head"><div><span class="kicker">Contact</span><h2>Get in touch</h2></div></div>
       <div class="contact">
-        <div class="card"><b>Call / WhatsApp</b><span class="tba">[+91 XXXXX XXXXX]</span></div>
-        <div class="card"><b>Email</b><span class="tba">[club email]</span></div>
+        <div class="card"><b>Email</b><a class="link" href="mailto:punjaicapitalsclub@gmail.com" style="word-break:break-all">punjaicapitalsclub@gmail.com</a></div>
+        <div class="card"><b>YouTube</b><a class="link" href="https://youtube.com/@punjaicapital" target="_blank" rel="noopener">@punjaicapital</a></div>
         <div class="card"><b>Meeting point</b><span>Punjai Puliampatti, Erode district, Tamil Nadu</span></div>
         <div class="card"><b>Instagram</b><a class="link" href="https://www.instagram.com/punjaicapitals" target="_blank" rel="noopener">@punjaicapitals</a></div>
       </div>
@@ -618,8 +616,8 @@
         </div>
       </div>
       <div class="foot__cols">
-        <div><b>Find us</b>Punjai Puliampatti<br>Erode district, Tamil Nadu</div>
-        <div><b>Follow</b><a class="foot__ig" href="https://www.instagram.com/punjaicapitals" target="_blank" rel="noopener"><svg viewBox="0 0 18 18" aria-hidden="true"><rect x="2" y="2" width="14" height="14" rx="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="13.2" cy="4.8" r="1" fill="currentColor"/></svg>@punjaicapitals</a></div>
+        <div><b>Find us</b>Punjai Puliampatti<br>Erode district, Tamil Nadu<a class="foot__mail" href="mailto:punjaicapitalsclub@gmail.com">punjaicapitalsclub@gmail.com</a></div>
+        <div><b>Follow</b><a class="foot__ig" href="https://www.instagram.com/punjaicapitals" target="_blank" rel="noopener"><svg viewBox="0 0 18 18" aria-hidden="true"><rect x="2" y="2" width="14" height="14" rx="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="13.2" cy="4.8" r="1" fill="currentColor"/></svg>@punjaicapitals</a><a class="foot__ig" href="https://youtube.com/@punjaicapital" target="_blank" rel="noopener"><svg viewBox="0 0 18 18" aria-hidden="true"><rect x="1.8" y="3.8" width="14.4" height="10.4" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7.6 6.7V11.3L11.4 9Z" fill="currentColor"/></svg>YouTube</a></div>
         <nav aria-label="Footer"><a href="#about">About</a><a href="#coaches">Coaches</a><a href="#sundays">Sunday runs</a><a href="#events">Events</a><a href="#races">Races</a><a href="#records">Records</a><a href="#gallery">Photos</a><a href="#faq">FAQ</a><a href="#join">Join free</a></nav>
       </div>
     </div>

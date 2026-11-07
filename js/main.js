@@ -1,9 +1,19 @@
 /* =====================================================================
-   DRAFT 5A — loader, hero logo, menu, 4-step registration.
+   DRAFT 5A — loader, hero logo, menu, 2-step registration (→ Google Form), live race results.
    ===================================================================== */
 (function(){
 'use strict';
-var SCRIPT_URL = 'PASTE_WEB_APP_URL_HERE';   // Google Apps Script web app URL
+/* Join form → Google Form. Responses land in the Google Form (and its linked Google Sheet).
+   1. In the Google Form: Send → link → copy the id between /d/e/ and /viewform → paste as GFORM.id
+   2. ⋮ → "Get pre-filled link", fill every question with any text, "Get link" → each entry.NNNN in that link
+      belongs to one question: paste them below. Leave a field '' to skip it. */
+var GFORM = {
+  id: 'PASTE_GOOGLE_FORM_ID_HERE',
+  fields: {
+    name: 'entry.', mobile: 'entry.', dob: 'entry.', gender: 'entry.', level: 'entry.', area: 'entry.',
+    ecName: 'entry.', ecPhone: 'entry.', blood: 'entry.', jersey: 'entry.', health: 'entry.', member: 'entry.'
+  }
+};
 var $ = function(s, r){ return (r || document).querySelector(s); };
 var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 var REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -83,17 +93,15 @@ function links(){
 }
 links();
 
-/* ---------- Registration: 4 steps → Google Apps Script ---------- */
-var form = $('#joinForm'), steps = $$('.step', form), stepN = 1, result = $('#result');
-var titles = ['About you', 'Emergency contact', 'Health & kit', 'One last thing'], nexts = ['Next: emergency contact', 'Next: health & kit', 'Next: final step', 'Submit registration'];
+/* ---------- Registration: 2 short steps → Google Form ---------- */
+var form = $('#joinForm'), steps = $$('.step', form), stepN = 1, LAST = steps.length, result = $('#result');
+var titles = ['About you', 'Safety & kit'], nexts = ['Next: safety & kit', 'Submit registration'];
 var v = function(i){ return $('#' + i).value.trim(); };
 var today = new Date(); $('#dob').max = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
 ['phone', 'ecPhone'].forEach(function(id){ $('#' + id).addEventListener('input', function(){ this.value = this.value.replace(/\D/g, '').slice(0, 10); }); });
 var REQ = {
-  1: [['name', 'Please enter your full name.'], ['phone', 'Enter a valid 10-digit mobile number.', 'tel'], ['dob', 'Please select your date of birth.'], ['gender', 'Please select your gender.'], ['email', 'Enter a valid email or leave it empty.', 'email'], ['area', 'Please enter your area or village.'], ['occupation', 'Please select your occupation.'], ['level', 'Please select your experience.']],
-  2: [['ecName', 'Please enter the emergency contact name.'], ['ecRel', 'Please select the emergency contact relationship.'], ['ecPhone', 'Enter a valid 10-digit emergency contact number.', 'tel']],
-  3: [['blood', 'Please select your blood group.'], ['jersey', 'Please select your jersey size.'], ['healthDetails', 'Please mention your health condition in the details box.', 'health']],
-  4: [['heard', 'Please tell us how you heard about us.'], ['fit', 'Please tick the fitness declaration.', 'check'], ['consent', 'Please tick the consent box.', 'check']]
+  1: [['name', 'Please enter your full name.'], ['phone', 'Enter a valid 10-digit mobile number.', 'tel'], ['dob', 'Please select your date of birth.'], ['gender', 'Please select your gender.'], ['level', 'Please select your experience.'], ['area', 'Please enter your area or village.']],
+  2: [['ecName', 'Please enter the emergency contact name.'], ['ecPhone', 'Enter a valid 10-digit emergency contact number.', 'tel'], ['blood', 'Please select your blood group.'], ['kit', 'Please select your jersey size.'], ['consent', 'Please tick the box to confirm.', 'check']]
 };
 function check(n){
   $$('[aria-invalid]', form).forEach(function(x){ x.removeAttribute('aria-invalid'); });
@@ -101,8 +109,6 @@ function check(n){
   for (var i = 0; i < list.length; i++){
     var id = list[i][0], msg = list[i][1], kind = list[i][2], el = $('#' + id), bad;
     if (kind === 'tel') bad = !/^[6-9]\d{9}$/.test(el.value);
-    else if (kind === 'email') bad = !!v('email') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email'));
-    else if (kind === 'health') bad = $('#health').selectedIndex === 1 && !v('healthDetails');
     else if (kind === 'check') bad = !el.checked;
     else bad = !v(id);
     if (bad){ result.className = 'err'; result.textContent = msg; el.setAttribute('aria-invalid', 'true'); el.focus(); return false; }
@@ -112,12 +118,12 @@ function check(n){
 function go(n){
   stepN = n; steps.forEach(function(s){ s.classList.toggle('on', +s.getAttribute('data-step') === n); });
   $$('.track span').forEach(function(s, i){ s.classList.toggle('on', i < n); });
-  $('#stepTitle').textContent = titles[n - 1]; $('#stepCount').textContent = 'STEP ' + n + ' OF 4 · * REQUIRED';
+  $('#stepTitle').textContent = titles[n - 1]; $('#stepCount').textContent = 'STEP ' + n + ' OF ' + LAST + ' · * REQUIRED';
   $('#backBtn').disabled = n === 1; $('#nextBtn').textContent = nexts[n - 1];
   var first = $('.step.on input, .step.on select', form); if (first) first.focus({ preventScroll: true });
 }
 $('#backBtn').addEventListener('click', function(){ if (stepN > 1) go(stepN - 1); });
-$('#nextBtn').addEventListener('click', function(){ if (!check(stepN)) return; if (stepN < 4) go(stepN + 1); else submit(); });
+$('#nextBtn').addEventListener('click', function(){ if (!check(stepN)) return; if (stepN < LAST) go(stepN + 1); else submit(); });
 form.addEventListener('submit', function(e){ e.preventDefault(); $('#nextBtn').click(); });
 function success(n){
   $$('.step,.form__foot,.track,.step__head', form).forEach(function(x){ x.style.display = 'none'; });
@@ -128,15 +134,41 @@ function success(n){
 }
 function submit(){
   var n = v('name'), btn = $('#nextBtn');
-  if (SCRIPT_URL.indexOf('PASTE') === 0){ result.className = ''; result.textContent = 'Demo mode: the form works, but it is not connected to the Google Sheet yet.'; success(n); return; }
+  var data = { name: n, mobile: $('#phone').value, dob: $('#dob').value, gender: v('gender'), level: v('level'), area: v('area'),
+               ecName: v('ecName'), ecPhone: $('#ecPhone').value, blood: v('blood'), jersey: v('kit'), health: v('health') || 'None', member: BIB };
+  if (GFORM.id.indexOf('PASTE') === 0){ result.className = ''; result.textContent = 'Demo mode: the form works, but it is not connected to the Google Form yet.'; success(n); return; }
+  var body = new URLSearchParams();
+  Object.keys(GFORM.fields).forEach(function(k){ var e = GFORM.fields[k]; if (e && e !== 'entry.' && data[k] !== undefined) body.append(e, data[k]); });
   btn.disabled = true; btn.textContent = 'Submitting…'; result.className = ''; result.textContent = 'Submitting your registration…';
-  var payload = { name: n, mobile: $('#phone').value, dob: $('#dob').value, gender: v('gender'), email: v('email'), area: v('area'), occupation: v('occupation'), level: v('level'), strava: v('strava'), ecName: v('ecName'), ecRel: v('ecRel'), ecPhone: $('#ecPhone').value, blood: v('blood'), health: v('health'), healthDetails: v('healthDetails'), jersey: v('jersey'), heard: v('heard'), message: v('message'), fit: 'Yes' };
-  fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
-    .then(function(x){ return x.json(); })
-    .then(function(j){ if (!j || !j.ok) throw new Error('fail'); result.textContent = ''; success(n); form.reset(); })
-    .catch(function(){ result.className = 'err'; result.textContent = 'Could not submit. Please check your connection and try again, or message the club on Instagram.'; })
-    .then(function(){ btn.disabled = false; btn.textContent = nexts[3]; });
+  // Google Forms sends no CORS headers, so the reply is opaque: a resolved fetch means the response was delivered.
+  fetch('https://docs.google.com/forms/d/e/' + GFORM.id + '/formResponse', { method: 'POST', mode: 'no-cors', body: body })
+    .then(function(){ result.textContent = ''; success(n); form.reset(); })
+    .catch(function(){ result.className = 'err'; result.textContent = 'Could not submit. Please check your connection and try again, or email punjaicapitalsclub@gmail.com.'; })
+    .then(function(){ btn.disabled = false; btn.textContent = nexts[LAST - 1]; });
 }
+})();
+
+/* ---------- Club records: live official results from MyRaceIndia ----------
+   A record card with data-myrace="Event Name|Bib" gets its time and overall rank from MyRaceIndia's public results API.
+   The values already written in the card stay as the fallback when the API is slow or down. */
+(function(){
+  var cards = document.querySelectorAll('[data-myrace]'); if (!cards.length || !window.fetch) return;
+  var API = 'https://admin.myraceindia.com/index.php/ControlApi/Record/Bib/';
+  function time(t){ return String(t).replace(/^00:/, '').replace(/^0(\d:)/, '$1'); }            // 00:45:37 → 45:37, 01:42:42 → 1:42:42
+  function nth(n){ var s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
+  Array.prototype.forEach.call(cards, function(card){
+    var p = card.getAttribute('data-myrace').split('|'); if (p.length < 2) return;
+    fetch(API + encodeURIComponent(p[1].trim()) + '/Event_Name/' + encodeURIComponent(p[0].trim()))
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(j){
+        var r = j && j[0]; if (!r || !r.Net_Time || r.Net_Time === '00:00:00') return;
+        card.querySelector('[data-f="time"]').textContent = time(r.Net_Time);
+        var m = /(\d+)\s*\/\s*(\d+)/.exec(r.OverallRank || r.TotalRank || '');
+        if (m) card.querySelector('[data-f="rank"]').textContent = nth(+m[1]) + ' of ' + (+m[2]).toLocaleString('en-IN');
+        card.setAttribute('data-live', 'ok');
+      })
+      .catch(function(){});
+  });
 })();
 
 /* ---------- Gobi race-day reel ---------- */
