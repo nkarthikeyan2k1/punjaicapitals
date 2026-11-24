@@ -1,19 +1,11 @@
 /* =====================================================================
-   DRAFT 5A — loader, hero logo, menu, 2-step registration (→ Google Form), live race results.
+   DRAFT 5A — loader, hero logo, menu, registration (→ Google Sheet), live race results.
    ===================================================================== */
 (function(){
 'use strict';
-/* Join form → Google Form. Responses land in the Google Form (and its linked Google Sheet).
-   1. In the Google Form: Send → link → copy the id between /d/e/ and /viewform → paste as GFORM.id
-   2. ⋮ → "Get pre-filled link", fill every question with any text, "Get link" → each entry.NNNN in that link
-      belongs to one question: paste them below. Leave a field '' to skip it. */
-var GFORM = {
-  id: 'PASTE_GOOGLE_FORM_ID_HERE',
-  fields: {
-    name: 'entry.', mobile: 'entry.', dob: 'entry.', gender: 'entry.', level: 'entry.', area: 'entry.',
-    ecName: 'entry.', ecPhone: 'entry.', blood: 'entry.', jersey: 'entry.', health: 'entry.', member: 'entry.'
-  }
-};
+/* Join form → Google Sheet. Paste the Apps Script "Web app URL" here (see apps-script/Code.gs for the script and steps).
+   Every field in the form with a name="…" is sent; the name becomes the column header in the sheet. */
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby5gG6PG9QN8j1x4t26fGdxGFGuZouF_Sx0czcO5zuuJFZ_4ZqIqJqBkTPxuyJcUhk/exec';   // e.g. 'https://script.google.com/macros/s/AKfy…/exec' — public by design: it can only ADD a row
 var $ = function(s, r){ return (r || document).querySelector(s); };
 var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 var REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -93,35 +85,59 @@ function links(){
 }
 links();
 
-/* ---------- Registration: 2 short steps → Google Form ---------- */
+/* ---------- Registration → Google Sheet ----------
+   Everything comes from the HTML: steps = <fieldset class="step"> (title = its <legend>),
+   fields = any input/select/textarea with a name (= sheet column), rules = required / data-check / data-msg. */
 var form = $('#joinForm'), steps = $$('.step', form), stepN = 1, LAST = steps.length, result = $('#result');
-var titles = ['About you', 'Safety & kit'], nexts = ['Next: safety & kit', 'Submit registration'];
-var v = function(i){ return $('#' + i).value.trim(); };
-var today = new Date(); $('#dob').max = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-['phone', 'ecPhone'].forEach(function(id){ $('#' + id).addEventListener('input', function(){ this.value = this.value.replace(/\D/g, '').slice(0, 10); }); });
-var REQ = {
-  1: [['name', 'Please enter your full name.'], ['phone', 'Enter a valid 10-digit mobile number.', 'tel'], ['dob', 'Please select your date of birth.'], ['gender', 'Please select your gender.'], ['level', 'Please select your experience.'], ['area', 'Please enter your area or village.']],
-  2: [['ecName', 'Please enter the emergency contact name.'], ['ecPhone', 'Enter a valid 10-digit emergency contact number.', 'tel'], ['blood', 'Please select your blood group.'], ['kit', 'Please select your jersey size.'], ['consent', 'Please tick the box to confirm.', 'check']]
-};
+var titles = steps.map(function(st){ var l = $('legend', st); return l ? l.textContent.trim() : ''; });
+// The step bar is written in the HTML (so it shows even before this script runs); rebuild it only if a step was added or removed.
+var track = $('.track', form);
+if (track.children.length !== LAST){
+  track.innerHTML = titles.map(function(t, i){ return '<span' + (i ? '' : ' class="on"') + '>' + (i + 1) + ' · ' + t.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</span>'; }).join('');
+}
+track.style.gridTemplateColumns = 'repeat(' + LAST + ',minmax(0,1fr))';
+var fields = function(scope){ return $$('input[name],select[name],textarea[name]', scope); };
+var val = function(el){ return el.type === 'checkbox' ? (el.checked ? 'Yes' : 'No') : String(el.value).trim(); };
+var T0 = Date.now();
+function isoDate(d){ return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+$$('input[type="date"]', form).forEach(function(el){       // no future dates; a date of birth also needs the minimum age
+  if (el.max) return;
+  var d = new Date(), age = +el.getAttribute('data-min-age') || 0; d.setFullYear(d.getFullYear() - age); el.max = isoDate(d);
+});
+$$('[data-check="mobile"]', form).forEach(function(el){ el.addEventListener('input', function(){ this.value = this.value.replace(/\D/g, '').slice(0, 10); }); });
+function labelOf(el){ var l = el.id && $('label[for="' + el.id + '"]', form); return l ? l.textContent.replace(/\s*\*|\(optional\)/g, '').trim() : el.name; }
 function check(n){
   $$('[aria-invalid]', form).forEach(function(x){ x.removeAttribute('aria-invalid'); });
-  var list = REQ[n];
+  var list = fields(steps[n - 1]);
   for (var i = 0; i < list.length; i++){
-    var id = list[i][0], msg = list[i][1], kind = list[i][2], el = $('#' + id), bad;
-    if (kind === 'tel') bad = !/^[6-9]\d{9}$/.test(el.value);
-    else if (kind === 'check') bad = !el.checked;
-    else bad = !v(id);
-    if (bad){ result.className = 'err'; result.textContent = msg; el.setAttribute('aria-invalid', 'true'); el.focus(); return false; }
+    var el = list[i], v = val(el), kind = el.getAttribute('data-check'), why = '';
+    if (el.name.charAt(0) === '_') continue;                                       // internal (honeypot)
+    if (el.required && (el.type === 'checkbox' ? !el.checked : !v)) why = 'missing';
+    else if (v && el.type !== 'checkbox'){
+      if (kind === 'mobile' && !/^[6-9]\d{9}$/.test(v)) why = 'format';
+      else if (kind === 'name' && !/^\p{L}[\p{L}\p{M} .'-]{1,99}$/u.test(v)) why = 'format';
+      else if (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) why = 'format';
+      else if (el.type === 'date' && (!/^\d{4}-\d{2}-\d{2}$/.test(v) || (el.min && v < el.min) || (el.max && v > el.max))) why = 'range';
+      else if (el.getAttribute('data-differs')){ var o = $('#' + el.getAttribute('data-differs')); if (o && val(o) === v) why = 'same'; }
+    }
+    if (why){
+      result.className = 'err';
+      result.textContent = el.getAttribute('data-msg-' + why) || el.getAttribute('data-msg') ||
+        (el.type === 'checkbox' ? 'Please tick the box to continue.' : 'Please check: ' + labelOf(el) + '.');
+      el.setAttribute('aria-invalid', 'true'); el.focus(); return false;
+    }
   }
   result.className = ''; result.textContent = ''; return true;
 }
+function nextLabel(n){ return n < LAST ? 'Next: ' + titles[n].toLowerCase() : 'Submit registration'; }
 function go(n){
-  stepN = n; steps.forEach(function(s){ s.classList.toggle('on', +s.getAttribute('data-step') === n); });
-  $$('.track span').forEach(function(s, i){ s.classList.toggle('on', i < n); });
+  stepN = n; steps.forEach(function(st, i){ st.classList.toggle('on', i === n - 1); });
+  $$('.track span', form).forEach(function(sp, i){ sp.classList.toggle('on', i < n); });
   $('#stepTitle').textContent = titles[n - 1]; $('#stepCount').textContent = 'STEP ' + n + ' OF ' + LAST + ' · * REQUIRED';
-  $('#backBtn').disabled = n === 1; $('#nextBtn').textContent = nexts[n - 1];
-  var first = $('.step.on input, .step.on select', form); if (first) first.focus({ preventScroll: true });
+  $('#backBtn').disabled = n === 1; $('#nextBtn').textContent = nextLabel(n);
+  var first = $('.step.on input, .step.on select, .step.on textarea', form); if (first) first.focus({ preventScroll: true });
 }
+go(1);
 $('#backBtn').addEventListener('click', function(){ if (stepN > 1) go(stepN - 1); });
 $('#nextBtn').addEventListener('click', function(){ if (!check(stepN)) return; if (stepN < LAST) go(stepN + 1); else submit(); });
 form.addEventListener('submit', function(e){ e.preventDefault(); $('#nextBtn').click(); });
@@ -132,19 +148,22 @@ function success(n){
   var dc = $('#doneCard'); dc.classList.add('on'); dc.focus();
   document.dispatchEvent(new CustomEvent('pcs:registered', { detail: { name: n, bib: BIB } }));
 }
+var busy = false;
 function submit(){
-  var n = v('name'), btn = $('#nextBtn');
-  var data = { name: n, mobile: $('#phone').value, dob: $('#dob').value, gender: v('gender'), level: v('level'), area: v('area'),
-               ecName: v('ecName'), ecPhone: $('#ecPhone').value, blood: v('blood'), jersey: v('kit'), health: v('health') || 'None', member: BIB };
-  if (GFORM.id.indexOf('PASTE') === 0){ result.className = ''; result.textContent = 'Demo mode: the form works, but it is not connected to the Google Form yet.'; success(n); return; }
-  var body = new URLSearchParams();
-  Object.keys(GFORM.fields).forEach(function(k){ var e = GFORM.fields[k]; if (e && e !== 'entry.' && data[k] !== undefined) body.append(e, data[k]); });
-  btn.disabled = true; btn.textContent = 'Submitting…'; result.className = ''; result.textContent = 'Submitting your registration…';
-  // Google Forms sends no CORS headers, so the reply is opaque: a resolved fetch means the response was delivered.
-  fetch('https://docs.google.com/forms/d/e/' + GFORM.id + '/formResponse', { method: 'POST', mode: 'no-cors', body: body })
-    .then(function(){ result.textContent = ''; success(n); form.reset(); })
+  if (busy) return;
+  for (var s = 1; s <= LAST; s++) if (!check(s)){ go(s); check(s); return; }       // re-check every step before sending
+  var data = {}; fields(form).forEach(function(el){ data[el.name] = val(el); });
+  data['Club number'] = BIB; data._t = Math.round((Date.now() - T0) / 1000);      // seconds on the page (bots are instant)
+  var n = data['Full name'] || '', btn = $('#nextBtn');
+  if (data._hp){ success(n); return; }                                             // a bot filled the hidden field: pretend it worked
+  if (SCRIPT_URL.indexOf('PASTE') === 0){ result.className = ''; result.textContent = 'Demo mode: the form works, but it is not connected to the Google Sheet yet.'; success(n); return; }
+  busy = true; btn.disabled = true; btn.textContent = 'Submitting…'; result.className = ''; result.textContent = 'Submitting your registration…';
+  // text/plain keeps this a "simple" request, so the browser can read the Apps Script reply without a CORS preflight.
+  fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(data) })
+    .then(function(x){ return x.json(); })
+    .then(function(j){ if (!j || !j.ok) throw new Error('fail'); result.textContent = ''; success(n); form.reset(); })
     .catch(function(){ result.className = 'err'; result.textContent = 'Could not submit. Please check your connection and try again, or email punjaicapitalsclub@gmail.com.'; })
-    .then(function(){ btn.disabled = false; btn.textContent = nexts[LAST - 1]; });
+    .then(function(){ busy = false; btn.disabled = false; btn.textContent = nextLabel(LAST); });
 }
 })();
 

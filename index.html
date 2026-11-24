@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Hind+Madurai:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
 <link rel="preload" as="image" href="assets/ig/gobi-marathon-2026-photo.jpg" fetchpriority="high">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/run.css">
+<link rel="stylesheet" href="css/style.css?v=20261124b">
+<link rel="stylesheet" href="css/run.css?v=20261124b">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -546,26 +546,34 @@
       <form class="form" id="joinForm" novalidate aria-labelledby="stepTitle">
         <div class="track" aria-hidden="true"><span class="on">1 · About you</span><span>2 · Safety &amp; kit</span></div>
         <div class="step__head"><h3 id="stepTitle">About you</h3><span id="stepCount">STEP 1 OF 2 · * REQUIRED</span></div>
+        <!-- HOW TO ADD A FIELD (no other file to edit):
+             1. Copy a <div class="field"> line inside one of the steps below.
+             2. Give the input/select a unique id and a name. The name becomes the column header in the Google Sheet.
+             3. Add  required  (and data-msg="…" for the error text) if it must be filled.
+                Checks:  data-check="mobile" (10-digit Indian mobile) · data-check="name" (letters) · type="email" · min / max on dates
+                · data-min-age="5" on a date of birth · data-differs="otherId" (must not equal another field).
+           HOW TO ADD A STEP: copy a whole <fieldset class="step" data-step="N"> block, give it the next number and a <legend>. -->
         <fieldset class="step on" data-step="1"><legend class="sr">About you</legend>
           <div class="grid2">
-            <div class="field full"><label for="name">Full name *</label><input id="name" maxlength="100" autocomplete="name" placeholder="Your full name"></div>
-            <div class="field"><label for="phone">Mobile number *</label><input id="phone" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="10-digit mobile number"></div>
-            <div class="field"><label for="dob">Date of birth *</label><input id="dob" type="date"></div>
-            <div class="field"><label for="gender">Gender *</label><select id="gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other / prefer not to say</option></select></div>
-            <div class="field"><label for="level">Experience *</label><select id="level"><option value="">Select</option><option>Beginner</option><option>Intermediate</option><option>Experienced</option></select></div>
-            <div class="field full"><label for="area">Area / village *</label><input id="area" maxlength="150" placeholder="Where do you live?"></div>
+            <div class="field full"><label for="name">Full name *</label><input id="name" name="Full name" required data-check="name" data-msg="Please enter your full name." data-msg-format="Please enter your name using letters only." maxlength="100" autocomplete="name" placeholder="Your full name"></div>
+            <div class="field"><label for="phone">Mobile number *</label><input id="phone" name="Mobile" required data-check="mobile" data-msg="Enter a valid 10-digit mobile number." type="tel" inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="10-digit mobile number"></div>
+            <div class="field"><label for="dob">Date of birth *</label><input id="dob" name="Date of birth" required min="1930-01-01" data-min-age="5" data-msg="Please select your date of birth." data-msg-range="Please check your date of birth." type="date"></div>
+            <div class="field"><label for="gender">Gender *</label><select id="gender" name="Gender" required data-msg="Please select your gender."><option value="">Select</option><option>Male</option><option>Female</option><option>Other / prefer not to say</option></select></div>
+            <div class="field"><label for="level">Experience *</label><select id="level" name="Experience" required data-msg="Please select your experience."><option value="">Select</option><option>Beginner</option><option>Intermediate</option><option>Experienced</option></select></div>
+            <div class="field full"><label for="area">Area / village *</label><input id="area" name="Area / village" required data-msg="Please enter your area or village." maxlength="150" placeholder="Where do you live?"></div>
           </div>
         </fieldset>
-        <fieldset class="step" data-step="2"><legend class="sr">Safety and kit</legend>
+        <fieldset class="step" data-step="2"><legend class="sr">Safety &amp; kit</legend>
           <div class="grid2">
-            <div class="field"><label for="ecName">Emergency contact name *</label><input id="ecName" maxlength="100" placeholder="Name"></div>
-            <div class="field"><label for="ecPhone">Emergency contact mobile *</label><input id="ecPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number"></div>
-            <div class="field"><label for="blood">Blood group *</label><select id="blood"><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option><option>Don't know</option></select></div>
-            <div class="field"><label for="kit">Jersey size *</label><select id="kit"><option value="">Select</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option></select></div>
-            <div class="field full"><label for="health">Health conditions or injuries (optional)</label><input id="health" maxlength="300" placeholder="Asthma, BP, sugar, injury, allergy… or leave empty"></div>
+            <div class="field"><label for="ecName">Emergency contact name *</label><input id="ecName" name="Emergency contact name" required data-msg="Please enter the emergency contact name." maxlength="100" placeholder="Name"></div>
+            <div class="field"><label for="ecPhone">Emergency contact mobile *</label><input id="ecPhone" name="Emergency contact mobile" required data-check="mobile" data-differs="phone" data-msg="Enter a valid 10-digit emergency contact number." data-msg-same="The emergency contact number must be different from your own number." type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number"></div>
+            <div class="field"><label for="blood">Blood group *</label><select id="blood" name="Blood group" required data-msg="Please select your blood group."><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option><option>Don't know</option></select></div>
+            <div class="field"><label for="kit">Jersey size *</label><select id="kit" name="Jersey size" required data-msg="Please select your jersey size."><option value="">Select</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option></select></div>
+            <div class="field full"><label for="health">Health conditions or injuries (optional)</label><input id="health" name="Health conditions" maxlength="300" placeholder="Asthma, BP, sugar, injury, allergy… or leave empty"></div>
           </div>
-          <label class="consent" for="consent"><input id="consent" type="checkbox"><span>I'm fit to take part in club runs and rides, and I agree to share these details with Punjai Capitals Sports Club.</span></label>
+          <label class="consent" for="consent"><input id="consent" name="Fit & consent" required data-msg="Please tick the box to confirm." type="checkbox"><span>I'm fit to take part in club runs and rides, and I agree to share these details with Punjai Capitals Sports Club.</span></label>
         </fieldset>
+        <div class="hp" aria-hidden="true"><label for="hpWebsite">Leave this empty</label><input id="hpWebsite" name="_hp" tabindex="-1" autocomplete="off"></div>
         <p id="result" role="status" aria-live="polite"></p>
         <div class="form__foot">
           <p class="fine">Your details are shared only with Punjai Capitals Sports Club.</p>
@@ -629,7 +637,7 @@
   <p class="foot__giant" aria-hidden="true">Punjai Capitals</p>
 </footer>
 
-<script src="js/main.js"></script>
-<script src="js/run.js" defer></script>
+<script src="js/main.js?v=20261124b"></script>
+<script src="js/run.js?v=20261124b" defer></script>
 </body>
 </html>

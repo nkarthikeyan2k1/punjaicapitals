@@ -14,5 +14,7 @@
 !assets/ig/*
 !assets/video/*
 !assets/people/*
+!apps-script/
+!apps-script/*.gs
 !README.md
 
