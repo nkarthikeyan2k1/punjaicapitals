@@ -18,3 +18,5 @@
 !apps-script/*.gs
 !README.md
 
+!vdotcalculator/
+!vdotcalculator/index.html

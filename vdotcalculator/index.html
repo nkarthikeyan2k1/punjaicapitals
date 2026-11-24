@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VDOT Running Calculator — Punjai Capitals Sports Club</title>
+<meta name="description" content="Free VDOT running calculator by Punjai Capitals Sports Club. Slide your race distance and time to see your VDOT, training paces and equivalent race times instantly.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="../assets/pcs-runner-icon-orange.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Hind+Madurai:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="../css/style.css?v=20261124c">
+<link rel="stylesheet" href="../css/calc.css?v=20261124c">
+</head>
+<body class="calc-page">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav__logo" href="../" aria-label="Punjai Capitals Sports — home"><img src="../assets/pcs-wordmark-dark.png" alt="Punjai Capitals Sports" width="655" height="117"></a>
+    <nav class="nav__links" aria-label="Main"><a href="../#about">About</a><a href="../#coaches">Coaches</a><a href="../#sundays">Sunday runs</a><a href="../#races">Races</a><a href="../#records">Records</a><a href="./" aria-current="page">Calculator</a><a href="../#faq">FAQ</a></nav>
+    <a class="btn" href="../#join">Join free</a>
+    <button class="nav__menu" type="button" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="sheet"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5H16M2 9H16M2 13H11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+  </div>
+</header>
+<div class="sheet" id="sheet" aria-hidden="true">
+  <button class="sheet__close" type="button" id="sheetClose" aria-label="Close menu"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+  <a href="../">Home</a><a href="../#about">About</a><a href="../#sundays">Sunday runs</a><a href="../#races">Races</a><a href="../#records">Records</a><a href="./" aria-current="page">Calculator</a><a href="../#faq">FAQ</a><a href="../#join" style="color:var(--accent-text)">Join free</a>
+</div>
+
+<main id="main">
+  <section class="calc-hero">
+    <div class="wrap">
+      <span class="kicker">Free running calculator</span>
+      <div class="calc-hero__title"><h1>VDOT Running Calculator</h1><button type="button" class="info-btn" data-open-info aria-haspopup="dialog"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 9V14M10 6.2V6.3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>What's VDOT?</button></div>
+      <p class="lead">Slide your race distance and finish time. Your VDOT, training paces and race predictions update as you move.</p>
+    </div>
+  </section>
+
+  <section class="calc-sec">
+    <div class="wrap">
+      <div class="calc" id="calc">
+        <div class="calc__top">
+          <div class="seg" role="tablist" aria-label="Calculator">
+            <button type="button" role="tab" id="tabVdot" aria-selected="true" aria-controls="panelVdot">VDOT &amp; paces</button>
+            <button type="button" role="tab" id="tabPace" aria-selected="false" aria-controls="panelPace" tabindex="-1">Pace converter</button>
+          </div>
+          <div class="calc__tools">
+          <div class="units" role="radiogroup" aria-label="Units">
+            <button type="button" role="radio" aria-checked="true" data-unit="km">km</button>
+            <button type="button" role="radio" aria-checked="false" data-unit="mi">mi</button>
+          </div>
+          </div>
+        </div>
+
+        <div class="calc__grid">
+          <!-- ===== inputs ===== -->
+          <div class="calc__inputs">
+            <div class="live" id="live" aria-hidden="true"><span class="live__k" id="liveK">VDOT</span><b id="liveV">—</b><span id="liveS"></span></div>
+            <div class="chips" role="group" aria-label="Race distance presets" id="chips"></div>
+
+            <div class="row">
+              <div class="row__head"><label for="distIn">Race distance</label>
+                <span class="pill"><input id="distIn" inputmode="decimal" autocomplete="off" aria-describedby="distName"><em id="distUnit">km</em></span></div>
+              <input type="range" id="dist" min="1.5" max="42.2" step="0.1" aria-label="Race distance slider">
+              <p class="row__note" id="distName"></p>
+            </div>
+
+            <div class="row" data-tab="vdot">
+              <div class="row__head"><label for="timeIn">Finish time</label>
+                <span class="pill"><input id="timeIn" inputmode="numeric" autocomplete="off" placeholder="h:mm:ss" aria-describedby="timeNote"></span></div>
+              <input type="range" id="time" step="1" aria-label="Finish time slider">
+              <p class="row__note" id="timeNote"></p>
+            </div>
+
+            <div class="row" data-tab="pace" hidden>
+              <div class="row__head"><label for="paceIn">Pace</label>
+                <span class="pill"><input id="paceIn" inputmode="numeric" autocomplete="off" placeholder="m:ss"><em id="paceUnit">/km</em></span></div>
+              <input type="range" id="pace" step="1" aria-label="Pace slider">
+              <p class="row__note" id="paceNote"></p>
+            </div>
+          </div>
+
+          <!-- ===== live result ===== -->
+          <div class="calc__out" aria-live="polite">
+            <div class="legend" aria-hidden="true"><span><i class="sw sw--on"></i><b id="legOn">Your VDOT</b></span><span><i class="sw"></i><b id="legOff">Scale 30–85</b></span></div>
+            <div class="ring">
+              <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="ring__bg" cx="60" cy="60" r="50"/><circle class="ring__fg" id="ringFg" cx="60" cy="60" r="50" pathLength="100"/></svg>
+              <div class="ring__c"><span class="ring__k" id="ringK">VDOT</span><b id="ringV">—</b><span class="ring__s" id="ringS"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <dl class="sum" id="sum"></dl>
+        <div class="calc__cta"><a class="btn" href="../#join">Train with the club</a><button class="btn btn--line" type="button" id="shareBtn">Copy link to my paces</button><span class="calc__msg" id="shareMsg" role="status"></span></div>
+      </div>
+
+      <!-- ===== detail results (VDOT tab) ===== -->
+      <div class="res" id="resVdot">
+        <div class="res__head"><h2>Your training paces</h2><p class="muted">Based on VDOT <b class="js-vdot">—</b>. Run most of your week easy; keep the hard paces for one or two sessions.</p></div>
+        <div class="zones" id="zones"></div>
+
+        <div class="res__two">
+          <div class="tbl">
+            <h3>Workout splits</h3>
+            <table id="splits"><caption class="sr">Split times for threshold, interval and repetition pace</caption></table>
+          </div>
+          <div class="tbl">
+            <h3>Equivalent race times</h3>
+            <table id="equiv"><caption class="sr">Race times you could run at the same fitness</caption></table>
+          </div>
+        </div>
+        <p class="fine calc__fine">VDOT uses Jack Daniels' running formula. Predictions assume proper training for the distance, a flat course and good weather. Heat, hills and humidity (hello, Tamil Nadu mornings) will slow you down.</p>
+      </div>
+
+      <!-- ===== detail results (Pace tab) ===== -->
+      <div class="res" id="resPace" hidden>
+        <div class="res__head"><h2>At this pace</h2><p class="muted">Finish times for common races at <b class="js-pace">—</b>.</p></div>
+        <div class="tbl"><table id="paceTbl"><caption class="sr">Finish times at the chosen pace</caption></table></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ===== "What's VDOT?" info (native <dialog>: Esc and the close button close it) ===== -->
+<dialog class="modal" id="vdotInfo" aria-labelledby="vdotInfoTitle">
+  <div class="modal__in">
+    <button type="button" class="modal__x" data-close-info aria-label="Close"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+    <span class="kicker">Quick guide</span>
+    <h2 id="vdotInfoTitle">What's your VDOT?</h2>
+    <p>VDOT is a single number for your current running fitness, worked out from a race result. Coach <b>Jack Daniels</b> and physiologist <b>Jimmy Gilbert</b> created it from lab tests on runners, and it's the system behind <i>Daniels' Running Formula</i>. The higher the number, the fitter you are.</p>
+    <p>It isn't your lab VO₂max. It's your "effective" VO₂max: what your race time says about your engine <i>and</i> your running economy together. Two runners with the same VDOT can expect similar race times.</p>
+
+    <h3>How to use it</h3>
+    <ul class="modal__list">
+      <li>Enter a <b>recent all-out race</b> (last 4–6 weeks), ideally between 1500 m and the marathon.</li>
+      <li>Use an official chip time if you have one. A training run or a hilly, very hot race will underestimate you.</li>
+      <li>Re-check every few weeks. As your race times drop, your VDOT goes up and your paces get faster.</li>
+    </ul>
+
+    <h3>What you get</h3>
+    <dl class="modal__zones">
+      <div><dt><i style="--z:#2E9D6B">E</i>Easy</dt><dd>Most of your weekly running: easy days, long runs, recovery. Conversational.</dd></div>
+      <div><dt><i style="--z:#2F7DD1">M</i>Marathon</dt><dd>Your predicted marathon race pace, for steady blocks in long runs.</dd></div>
+      <div><dt><i style="--z:#D9941A">T</i>Threshold</dt><dd>"Comfortably hard": tempo runs and cruise intervals. Raises your lactate threshold.</dd></div>
+      <div><dt><i style="--z:#D4440F">I</i>Interval</dt><dd>Hard 3–5 minute reps that work your VO₂max. Equal jog recovery.</dd></div>
+      <div><dt><i style="--z:#B42318">R</i>Repetition</dt><dd>Short, fast 200–400 m reps for speed and form, with full recovery.</dd></div>
+    </dl>
+    <p><b>Equivalent race times</b> show what the same fitness should give you at other distances. They're handy for setting goals, and they assume you've trained for that distance.</p>
+
+    <h3>Good to know</h3>
+    <ul class="modal__list">
+      <li>Predictions assume a flat course and cool weather. Heat, humidity and hills slow everyone down, so expect to be a little slower on a hot Punjai morning.</li>
+      <li>Most of your week should be Easy. Daniels' rough limits for the hard work: Threshold about 10% of your weekly distance, Interval about 8%, Repetition about 5%.</li>
+      <li>New to running? Build a few weeks of easy running first, and check with a doctor if you have a health condition.</li>
+    </ul>
+    <p class="modal__src">Formula: Daniels &amp; Gilbert, <i>Oxygen Power</i> (1979). VO₂ = −4.60 + 0.182258·v + 0.000104·v² (v in m/min); share of VO₂max held for t minutes = 0.8 + 0.1894393·e<sup>−0.012778t</sup> + 0.2989558·e<sup>−0.1932605t</sup>; VDOT = VO₂ ÷ share. Results match the published Daniels tables to within a few seconds.</p>
+    <div class="modal__foot"><a class="btn" href="../#join">Train with the club</a><button type="button" class="btn btn--line" data-close-info>Got it</button></div>
+  </div>
+</dialog>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div>
+        <img class="foot__logo" src="../assets/pcs-wordmark.png" alt="Punjai Capitals Sports" width="655" height="117" loading="lazy">
+        <span class="kicker">Cool-down</span>
+        <p class="foot__big">Stretch. Hydrate. See you at the next run.</p>
+        <div class="foot__ctas"><a class="btn" href="../#join">Join free</a><a class="btn btn--line" href="../">Back to home</a></div>
+      </div>
+      <div class="foot__cols">
+        <div><b>Find us</b>Punjai Puliampatti<br>Erode district, Tamil Nadu<a class="foot__mail" href="mailto:punjaicapitalsclub@gmail.com">punjaicapitalsclub@gmail.com</a></div>
+        <div><b>Follow</b><a class="foot__ig" href="https://www.instagram.com/punjaicapitals" target="_blank" rel="noopener"><svg viewBox="0 0 18 18" aria-hidden="true"><rect x="2" y="2" width="14" height="14" rx="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="13.2" cy="4.8" r="1" fill="currentColor"/></svg>@punjaicapitals</a><a class="foot__ig" href="https://youtube.com/@punjaicapital" target="_blank" rel="noopener"><svg viewBox="0 0 18 18" aria-hidden="true"><rect x="1.8" y="3.8" width="14.4" height="10.4" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7.6 6.7V11.3L11.4 9Z" fill="currentColor"/></svg>YouTube</a></div>
+        <nav aria-label="Footer"><a href="../">Home</a><a href="../#sundays">Sunday runs</a><a href="../#races">Races</a><a href="../#records">Records</a><a href="./">Calculator</a><a href="../#faq">FAQ</a><a href="../#join">Join free</a></nav>
+      </div>
+    </div>
+    <div class="foot__bar"><span>Together we train. Together we grow. Together we achieve.</span><span>© <span id="year">2026</span> Punjai Capitals Sports Club</span></div>
+  </div>
+  <p class="foot__giant" aria-hidden="true">Punjai Capitals</p>
+</footer>
+
+<script src="../js/vdot.js?v=20261124c"></script>
+</body>
+</html>
