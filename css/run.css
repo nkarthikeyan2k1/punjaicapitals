@@ -20,6 +20,9 @@ body.run main > section[data-lane="r"]:not(.hero) > .wrap{padding-right:var(--la
   body.run main > section[data-lane="m"] .lane-grid{column-gap:calc(var(--lane) + 40px)}
   body.run #what .lane-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   body.run main > section[data-lane="m"] .head > *{max-width:calc(50% - var(--lane) / 2 - 28px)}
+  /* VDOT promo: no box across the track; text on the left, example on the right of the lane */
+  body.run #records .vpromo{grid-template-columns:repeat(2,minmax(0,1fr));background:none;border:0;padding:0}
+  body.run #records .vpromo__demo{justify-self:start}
 }
 @media (max-width:760px){
   body.run main > section[data-lane-mobile="l"] > .wrap{padding-left:var(--lane)}

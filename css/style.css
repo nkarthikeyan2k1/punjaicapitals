@@ -547,3 +547,46 @@ body.menu-open{overflow:hidden}
 
 /* join form honeypot: hidden from people and screen readers, filled in only by spam bots */
 .hp{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);opacity:0;pointer-events:none}
+
+/* ---------- VDOT calculator promo (end of Club records) ---------- */
+.vpromo{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);grid-template-areas:"copy demo" "acts demo";column-gap:clamp(24px,4vw,56px);row-gap:18px;align-items:center;margin-top:clamp(32px,4vw,48px);padding:clamp(22px,3vw,32px) clamp(20px,3.4vw,40px);border-radius:18px;border:1px solid #EDBFA6;background:linear-gradient(110deg,#FFF6EF 0%,#FFFFFF 62%,#FDE7DA 100%)}
+.vpromo__copy{grid-area:copy}
+.vpromo__copy .kicker{margin-bottom:10px}
+.vpromo h2{line-height:1.04;letter-spacing:-.03em;max-width:640px}
+/* Highlighter sweep behind the second line; draws in when the card scrolls into view (main.js drops .is-wait) */
+.vpromo h2 em{font-style:normal;color:var(--accent);padding:0 .08em;margin-left:-.08em;background:linear-gradient(rgba(255,201,77,.6),rgba(255,201,77,.6)) no-repeat 0 86%/100% .38em;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-size .9s cubic-bezier(.2,.7,.2,1) .35s}
+.vpromo.is-wait h2 em{background-size:0% .38em;transition:none}
+.vpromo__copy p{margin-top:12px;color:var(--muted);max-width:520px;font-size:16px}
+.vpromo__new{display:inline-flex;align-items:center;gap:8px}
+.vpromo__new i{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(212,68,15,.5);animation:vpPulse 2s ease-out infinite}
+@keyframes vpPulse{to{box-shadow:0 0 0 10px rgba(212,68,15,0)}}
+.vpromo__acts{grid-area:acts;display:flex;align-items:center;flex-wrap:wrap;gap:12px 22px}
+.vpromo__cta{position:relative;overflow:hidden;isolation:isolate;min-height:50px;padding:0 24px;font-size:16px;box-shadow:0 8px 22px rgba(212,68,15,.28)}
+/* Soft shine sweeps across the button, then the arrow nudges: repeats every 4s */
+.vpromo__cta::before{content:"";position:absolute;top:0;bottom:0;left:0;width:40%;z-index:-1;background:linear-gradient(100deg,transparent,rgba(255,255,255,.42),transparent);transform:translateX(-130%) skewX(-20deg);animation:vpShine 4s ease-in-out 1.5s infinite}
+.vpromo__cta span{display:inline-block;transition:transform .2s;animation:vpNudge 4s ease-in-out 1.5s infinite}
+.vpromo__cta:hover span{animation:none;transform:translateX(5px)}
+.vpromo__cta:hover::before{animation:none}
+@keyframes vpShine{0%{transform:translateX(-130%) skewX(-20deg)}35%,100%{transform:translateX(270%) skewX(-20deg)}}
+@keyframes vpNudge{0%,30%,52%,100%{transform:none}38%{transform:translateX(6px)}46%{transform:translateX(2px)}}
+.vpromo__demo{grid-area:demo;justify-self:end;display:flex;align-items:center;gap:16px;padding:14px 20px 14px 14px;border-radius:16px;background:#fff;border:1px solid var(--line);box-shadow:0 10px 30px rgba(26,9,4,.07);text-decoration:none;transition:border-color .2s,transform .2s}
+.vpromo__demo:hover{border-color:var(--accent);transform:translateY(-2px)}
+.vpromo__ring{position:relative;display:grid;place-items:center;width:84px;height:84px;flex:none}
+.vpromo__ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.vpromo__ring circle{fill:none;stroke-width:8}
+.vpromo__track{stroke:var(--accent-soft)}
+.vpromo__fill{stroke:var(--accent);stroke-linecap:round;stroke-dasharray:213.6;stroke-dashoffset:117.5;transition:stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1)}
+.vpromo__ring b{position:relative;font-family:var(--head);font-weight:800;font-size:24px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink)}
+.vpromo__ex{display:flex;flex-direction:column;line-height:1.35;font-size:15px;color:var(--muted)}
+.vpromo__ex small{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-text)}
+.vpromo__ex b{color:var(--ink);font-variant-numeric:tabular-nums}
+.vpromo__arrow b{color:var(--accent-text)}
+.vpromo.is-wait .vpromo__fill{stroke-dashoffset:213.6;transition:none}
+@media (max-width:760px){
+  .vpromo{grid-template-columns:1fr;grid-template-areas:"copy" "demo" "acts";row-gap:16px}
+  .vpromo__demo{justify-self:stretch;padding:10px 14px 10px 10px}
+  .vpromo__ring{width:68px;height:68px}
+  .vpromo__ring b{font-size:20px}
+  .vpromo__acts .btn{flex:1 1 auto}
+}
+@media (prefers-reduced-motion:reduce){.vpromo__new i,.vpromo__cta span,.vpromo__cta::before{animation:none}.vpromo__cta::before{display:none}.vpromo__fill,.vpromo h2 em{transition:none}}

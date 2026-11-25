@@ -75,16 +75,6 @@ $$('.carousel').forEach(function(c){
   setup();
 });
 
-/* ---------- Share links (after registering) ---------- */
-function pageUrl(){ return /^https?:/.test(location.href) ? location.href.split('#')[0] : 'https://www.instagram.com/punjaicapitals'; }
-function links(){
-  var t = encodeURIComponent('I just joined Punjai Capitals Sports Club, a free running and cycling club in Punjai Puliampatti. Come run with us!'), u = encodeURIComponent(pageUrl());
-  $('#shWa').href = 'https://wa.me/?text=' + t + '%20' + u;
-  $('#shX').href = 'https://twitter.com/intent/tweet?text=' + t + '&url=' + u + '&hashtags=PunjaiCapitals';
-  $('#shFb').href = 'https://www.facebook.com/sharer/sharer.php?u=' + u;
-}
-links();
-
 /* ---------- Registration → Google Sheet ----------
    Everything comes from the HTML: steps = <fieldset class="step"> (title = its <legend>),
    fields = any input/select/textarea with a name (= sheet column), rules = required / data-check / data-msg. */
@@ -201,4 +191,26 @@ function submit(){
   if ('IntersectionObserver' in window) new IntersectionObserver(function(es){ es.forEach(function(e){
     if (e.isIntersecting){ if (!RM && user !== false){ v.preload = 'auto'; v.play().catch(function(){}); } } else if (!v.paused) v.pause();
   }); }, { threshold: .35 }).observe(v);
+})();
+
+/* ---------- VDOT calculator promo: ring fills and number counts up once, when it scrolls into view ---------- */
+(function(){
+  var box = document.querySelector('.vpromo'), num = document.getElementById('vpromoNum');
+  if (!box || !num || !('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var to = parseFloat(num.getAttribute('data-to'));
+  box.classList.add('is-wait'); num.textContent = '0.0';
+  var io = new IntersectionObserver(function(es){
+    if (!es[0].isIntersecting) return;
+    io.disconnect();
+    box.getBoundingClientRect();                       // commit the empty ring before animating it
+    box.classList.remove('is-wait');
+    var t0 = null;
+    (function step(t){
+      if (t0 === null) t0 = t;
+      var k = Math.min(1, (t - t0) / 1400), e = 1 - Math.pow(1 - k, 3);
+      num.textContent = (to * e).toFixed(1);
+      if (k < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }, { threshold: .5 });
+  io.observe(box);
 })();

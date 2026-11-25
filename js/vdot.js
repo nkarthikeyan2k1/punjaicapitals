@@ -252,6 +252,9 @@ $$('[data-close-info]').forEach(function(b){ b.addEventListener('click', closeIn
 info.addEventListener('click', function(e){ if (e.target === info) closeInfo(); });   // click on the dark backdrop
 info.addEventListener('close', function(){ document.body.classList.remove('modal-open'); if (opener) opener.focus(); });
 
+// Linked from the home page as vdotcalculator/#whats-vdot: open the guide straight away.
+if (location.hash === '#whats-vdot'){ var ib = $('[data-open-info]'); if (ib) ib.click(); }
+
 /* exposed for tests in the browser console */
 window.PCS_VDOT = { vdotOf: vdotOf, raceSec: raceSec, paceAt: paceAt, fmtTime: fmtTime };
 })();

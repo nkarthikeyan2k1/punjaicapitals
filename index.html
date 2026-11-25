@@ -6,12 +6,13 @@
 <title>Punjai Capitals Sports Club — Run together. Rise together.</title>
 <meta name="description" content="A free, coach-led community club for running, cycling and endurance sports in Punjai Puliampatti, Erode district, Tamil Nadu. Every pace is welcome.">
 <meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="assets/pcs-runner-icon-orange.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Hind+Madurai:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
 <link rel="preload" as="image" href="assets/ig/gobi-marathon-2026-photo.jpg" fetchpriority="high">
-<link rel="stylesheet" href="css/style.css?v=20261124b">
-<link rel="stylesheet" href="css/run.css?v=20261124b">
+<link rel="stylesheet" href="css/style.css?v=20261125b">
+<link rel="stylesheet" href="css/run.css?v=20261125a">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -347,6 +348,25 @@
           <p class="seg__foot">1,116 attempts by 336 people · <a class="link" href="https://www.strava.com/segments/35944645" target="_blank" rel="noopener">Full leaderboard on Strava</a></p>
         </article>
       </div>
+
+      <!-- VDOT calculator promo (links to /vdotcalculator/). Example: 5K in 25:00 = VDOT 38.3 (Daniels formula). -->
+      <aside class="vpromo lane-grid" aria-labelledby="vpromoTitle">
+        <div class="vpromo__copy">
+          <span class="kicker vpromo__new"><i aria-hidden="true"></i>New · free tool</span>
+          <h2 id="vpromoTitle">Check your race time<br> <em>in our free VDOT&nbsp;tool.</em></h2>
+          <p>Drop in a 5K, 10K or half. Get your VDOT, predicted times at every distance, and the paces to train at. Takes 10 seconds.</p>
+        </div>
+        <a class="vpromo__demo" href="vdotcalculator/?d=5&amp;t=25:00" aria-label="Example: a 5K in 25:00 is a VDOT of 38.3. Open the calculator with this example.">
+          <span class="vpromo__ring" aria-hidden="true">
+            <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" class="vpromo__track"/><circle cx="40" cy="40" r="34" class="vpromo__fill" id="vpromoFill"/></svg>
+            <b id="vpromoNum" data-to="38.3">38.3</b>
+          </span>
+          <span class="vpromo__ex" aria-hidden="true"><small>Example</small><span>5K · <b>25:00</b></span><span class="vpromo__arrow">→ VDOT <b>38.3</b></span></span>
+        </a>
+        <div class="vpromo__acts">
+          <a class="btn vpromo__cta" href="vdotcalculator/" target="_blank" rel="noopener noreferrer">Predict my marathon time <span aria-hidden="true">→</span></a>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -584,12 +604,10 @@
           <h3 id="doneTitle">You're in!</h3>
           <div class="bib" id="bib">PCSC-2026-0000</div>
           <p class="muted">That's your club number. A captain will contact you before your first run.</p>
-          <p style="margin-top:18px;font-weight:600">Bring a friend along:</p>
-          <div class="share" aria-label="Share the club">
-            <a id="shWa" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 15l1-3.2A6.5 6.5 0 1 1 6.6 14z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>WhatsApp</a>
-            <a id="shX" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 3L15 15M15 3L3 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>X / Twitter</a>
-            <a id="shFb" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M10.5 16V9.5H13L13.4 7H10.5V5.5C10.5 4.8 10.8 4.3 11.8 4.3H13.5V2.1C13.2 2 12.3 2 11.3 2 9.2 2 8 3.2 8 5.3V7H5.7v2.5H8V16" fill="currentColor"/></svg>Facebook</a>
-            <a href="https://www.instagram.com/punjaicapitals" target="_blank" rel="noopener"><svg viewBox="0 0 18 18" aria-hidden="true"><rect x="2" y="2" width="14" height="14" rx="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>Instagram</a>
+          <p style="margin-top:18px;font-weight:600">Follow the club for run updates:</p>
+          <div class="share" aria-label="Follow the club">
+            <a href="https://www.instagram.com/punjaicapitals" target="_blank" rel="noopener"><svg viewBox="0 0 18 18" aria-hidden="true"><rect x="2" y="2" width="14" height="14" rx="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="13.2" cy="4.8" r="1" fill="currentColor"/></svg>Instagram</a>
+            <a href="https://youtube.com/@punjaicapital" target="_blank" rel="noopener"><svg viewBox="0 0 18 18" aria-hidden="true"><rect x="1.8" y="3.8" width="14.4" height="10.4" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7.6 6.7V11.3L11.4 9Z" fill="currentColor"/></svg>YouTube</a>
           </div>
         </div>
       </form>
@@ -637,7 +655,7 @@
   <p class="foot__giant" aria-hidden="true">Punjai Capitals</p>
 </footer>
 
-<script src="js/main.js?v=20261124b"></script>
+<script src="js/main.js?v=20261125a"></script>
 <script src="js/run.js?v=20261124b" defer></script>
 </body>
 </html>
